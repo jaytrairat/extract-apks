@@ -7,9 +7,17 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/spf13/cobra"
 )
 
-func main() {
+var rootCmd = &cobra.Command{
+	Use:   "extract-apks",
+	Short: "Extract APK files from a directory",
+	Run:   run,
+}
+
+func run(cmd *cobra.Command, args []string) {
 	targetDirectory := "."
 	scriptDir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 	currentDir, _ := os.Getwd()
@@ -35,4 +43,11 @@ func main() {
 	})
 
 	fmt.Println(time.Now().Format("2006-01-02 15:04:05") + " :: Completed")
+}
+
+func main() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
