@@ -29,6 +29,7 @@ func main() {
 		if !info.IsDir() && filepath.Ext(info.Name()) == ".apk" {
 			cmd := exec.Command("jadx", "-d", filepath.Join(currentDir, filepath.Dir(path), "CodeExtract"), path)
 			cmd.CombinedOutput()
+			fmt.Printf("%s :: %s extracted\n", time.Now().Format("2006-01-02 15:04:05"), path)
 		}
 		return nil
 	})
