@@ -23,3 +23,17 @@ go.work
 */CodeExtract
 */AndroidProject
 *.apk
+
+
+
+*.iml
+.gradle
+*/local.properties
+*/.idea
+*/.gitignore
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties

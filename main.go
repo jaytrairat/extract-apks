@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	isRenew bool
+	isRenew     bool
+	isDecompile bool
 )
 
 var rootCmd = &cobra.Command{
@@ -42,20 +43,27 @@ func run(cmd *cobra.Command, args []string) {
 		return nil
 	})
 
-	filepath.Walk(targetDirectory, func(path string, info os.FileInfo, err error) error {
-		if !info.IsDir() && filepath.Ext(info.Name()) == ".apk" {
-			cmd := exec.Command("jadx", "-d", filepath.Join(currentDir, filepath.Dir(path), "CodeExtract"), path)
-			cmd.CombinedOutput()
-			fmt.Printf("%s :: %s extracted\n", time.Now().Format("2006-01-02 15:04:05"), path)
-		}
-		return nil
-	})
+	if isDecompile {
+		filepath.Walk(targetDirectory, func(path string, info os.FileInfo, err error) error {
+			if !info.IsDir() && filepath.Ext(info.Name()) == ".apk" {
+				cmd := exec.Command("jadx", "-d", filepath.Join(currentDir, filepath.Dir(path), "CodeExtract"), path)
+				_, err := cmd.CombinedOutput()
+				if err != nil {
+					fmt.Printf("%s :: Error when extract :: %s", time.Now().Format("2006-01-02 15:04:05"), path)
+				} else {
+					fmt.Printf("%s :: %s extracted\n", time.Now().Format("2006-01-02 15:04:05"), path)
+				}
+			}
+			return nil
+		})
+	}
 
 	fmt.Println(time.Now().Format("2006-01-02 15:04:05") + " :: Completed")
 }
 
 func main() {
-	rootCmd.Flags().BoolVarP(&isRenew, "renew", "r", false, "remove old folders")
+	rootCmd.Flags().BoolVarP(&isRenew, "renewal", "r", false, "Remove old folders")
+	rootCmd.Flags().BoolVarP(&isDecompile, "decompile", "d", false, "Decompile apks")
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
