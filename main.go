@@ -33,7 +33,6 @@ func run(cmd *cobra.Command, args []string) {
 			androidProjectFolder := filepath.Join(path, "AndroidProject")
 
 			if isRenew {
-				os.RemoveAll(codeExtractFolder)
 				os.RemoveAll(androidProjectFolder)
 			}
 			os.MkdirAll(codeExtractFolder, os.ModePerm)
