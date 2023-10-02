@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -26,7 +27,7 @@ func main() {
 		if err != nil {
 			return err
 		}
-		if info.IsDir() && path != scriptDir && path != currentDir && !strings.HasPrefix(filepath.Base(path), ".") {
+		if info.IsDir() && path != scriptDir && path != currentDir && !strings.HasPrefix(filepath.Base(path), ".") && filepath.Dir(path) == targetDirectory {
 			codeExtractFolder := filepath.Join(path, "CodeExtract")
 			androidProjectFolder := filepath.Join(path, "AndroidProject")
 
@@ -36,7 +37,7 @@ func main() {
 			if err := os.MkdirAll(androidProjectFolder, os.ModePerm); err != nil {
 				return err
 			}
-			fmt.Printf("Folders created inside %s\n", path)
+			fmt.Printf("%s :: Folders created inside %s\n", time.Now().Format("2006-01-02 15:04:05"), path)
 		}
 		return nil
 	})
@@ -46,5 +47,5 @@ func main() {
 		return
 	}
 
-	fmt.Println("Folders created successfully.")
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05") + " :: Completed")
 }
